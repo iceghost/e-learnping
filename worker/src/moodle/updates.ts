@@ -1,10 +1,10 @@
-export interface Update {
+export type Update = {
     // module id
     id: number;
     updates: UpdateDetail[];
-}
+};
 
-type UpdateDetail =
+export type UpdateDetail =
     | {
           name: 'configuration';
           timeupdated: number;
@@ -23,7 +23,7 @@ export const GetUpdatesSince = {
             wsfunction: 'core_course_get_updates_since',
         };
     },
-    decode(body: any) {
-        return body;
+    decode(body: { instances: Update[] }): Update[] {
+        return body.instances;
     },
 };

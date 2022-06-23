@@ -25,7 +25,17 @@ export default {
     ): Promise<Response> {
         const moodle = new Client(env.ELEARNING_TOKEN);
 
-        const result = await moodle.getContents(115364);
+        const courses = await moodle.getEnrolledCourses(
+            Classification.INPROGRESS
+        );
+        const result = await Promise.all(
+            courses.map((course) =>
+                moodle.getUpdatesAndModules(
+                    course.id,
+                    startOfQuarter(new Date())
+                )
+            )
+        );
 
         return Response.json(result);
     },
