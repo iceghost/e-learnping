@@ -1,6 +1,10 @@
-import { GetEnrolledCourses } from './courses';
+import { Classification, GetEnrolledCourses } from './courses';
 import { GetContents, Module } from './modules';
 import { GetUpdatesSince, Update } from './updates';
+
+// reexports
+export type { Module, Update };
+export { Classification };
 
 interface WSParams {
     wsfunction: string;

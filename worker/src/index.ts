@@ -1,6 +1,4 @@
-import { Client } from './moodle';
-import { Classification, GetEnrolledCourses } from './moodle/courses';
-import { GetUpdatesSince } from './moodle/updates';
+import { Client, Classification } from 'moodle';
 
 import { startOfQuarter } from 'date-fns';
 
@@ -25,16 +23,9 @@ export default {
     ): Promise<Response> {
         const moodle = new Client(env.ELEARNING_TOKEN);
 
-        const courses = await moodle.getEnrolledCourses(
-            Classification.INPROGRESS
-        );
-        const result = await Promise.all(
-            courses.map((course) =>
-                moodle.getUpdatesAndModules(
-                    course.id,
-                    startOfQuarter(new Date())
-                )
-            )
+        const result = await moodle.getUpdatesAndModules(
+            115364,
+            startOfQuarter(new Date())
         );
 
         return Response.json(result);
