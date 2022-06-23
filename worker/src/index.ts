@@ -1,12 +1,8 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `wrangler dev src/index.ts` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `wrangler publish src/index.ts --name my-worker` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Client } from './moodle';
+import { Classification, GetEnrolledCourses } from './moodle/courses';
+import { GetUpdatesSince } from './moodle/updates';
+
+import { startOfQuarter } from 'date-fns';
 
 export interface Env {
     ELEARNING_TOKEN: string;
@@ -27,23 +23,10 @@ export default {
         env: Env,
         ctx: ExecutionContext
     ): Promise<Response> {
-        const url = new URL(
-            'http://e-learning.hcmut.edu.vn/webservice/rest/server.php'
-        );
-        const DEFAULT_ARGS = {
-            moodlewsrestformat: 'json',
-            wstoken: env.ELEARNING_TOKEN,
-        } as const;
+        const moodle = new Client(env.ELEARNING_TOKEN);
 
-        url.search = new URLSearchParams(DEFAULT_ARGS).toString();
-        url.searchParams.set(
-            'wsfunction',
-            'core_course_get_enrolled_courses_by_timeline_classification'
-        );
-        url.searchParams.set('classification', 'inprogress');
+        const result = await moodle.getContents(115364);
 
-        return await fetch(url.toString());
-
-        // return new Response(env.ELEARNING_TOKEN);
+        return Response.json(result);
     },
 };
