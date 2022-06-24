@@ -6,12 +6,21 @@
                 "^build"
             ],
             "outputs": [
-                "dist/**"
+                "dist/**",
+                ".svelte-kit/output/**"
             ]
         },
         "dev": {
             "dependsOn": [
                 "^build"
+            ]
+        },
+        "preview": {
+            "dependsOn": [
+                "build"
+            ],
+            "outputs": [
+                ".svelte-kit/output/**"
             ]
         }
     }

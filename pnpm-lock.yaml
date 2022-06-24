@@ -17,6 +17,7 @@ importers:
       svelte-preprocess: ^4.10.6
       tslib: ^2.3.1
       typescript: ^4.7.2
+      vapid-keys: workspace:*
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.52
       '@sveltejs/kit': 1.0.0-next.354_svelte@3.48.0
@@ -25,19 +26,24 @@ importers:
       svelte-preprocess: 4.10.7_lvfi2wesz6u4l5rfbnetbucfmm
       tslib: 2.4.0
       typescript: 4.7.4
+      vapid-keys: link:../../packages/vapid-keys
 
   apps/worker:
     specifiers:
       '@cloudflare/workers-types': ^3.13.0
       date-fns: ^2.28.0
+      itty-router: ^2.6.1
       moodle: workspace:*
       typescript: ^4.7.4
+      web-push: ^3.5.0
       wrangler: ^2.0.15
     devDependencies:
       '@cloudflare/workers-types': 3.13.0
       date-fns: 2.28.0
+      itty-router: 2.6.1
       moodle: link:../../packages/moodle
       typescript: 4.7.4
+      web-push: 3.5.0
       wrangler: 2.0.15
 
   packages/moodle:
@@ -45,6 +51,9 @@ importers:
       typescript: ^4.7.4
     devDependencies:
       typescript: 4.7.4
+
+  packages/vapid-keys:
+    specifiers: {}
 
 packages:
 
@@ -466,6 +475,15 @@ packages:
       readable-stream: 3.6.0
     dev: true
 
+  /asn1.js/5.4.1:
+    resolution: {integrity: sha512-+I//4cYPccV8LdmBLiX8CYvf9Sp3vQsrqu2QNXRcrbiWvcx/UdlFiqUJJzxRQxgsZmvhXhn4cSKeSmoFjVdupA==}
+    dependencies:
+      bn.js: 4.12.0
+      inherits: 2.0.4
+      minimalistic-assert: 1.0.1
+      safer-buffer: 2.1.2
+    dev: true
+
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
@@ -485,6 +503,10 @@ packages:
     resolution: {integrity: sha512-F1+K8EbfOZE49dtoPtmxUQrpXaBIl3ICvasLh+nJta0xkz+9kF/7uet9fLnwKqhDrmj6g+6K3Tw9yQPUg2ka5g==}
     dev: true
 
+  /bn.js/4.12.0:
+    resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
+    dev: true
+
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
     dependencies:
@@ -501,6 +523,10 @@ packages:
 
   /buffer-crc32/0.2.13:
     resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
+    dev: true
+
+  /buffer-equal-constant-time/1.0.1:
+    resolution: {integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==}
     dev: true
 
   /buffer-from/1.1.2:
@@ -635,6 +661,12 @@ packages:
   /dotenv/10.0.0:
     resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
     engines: {node: '>=10'}
+    dev: true
+
+  /ecdsa-sig-formatter/1.0.11:
+    resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
+    dependencies:
+      safe-buffer: 5.2.1
     dev: true
 
   /emoji-regex/8.0.0:
@@ -1208,6 +1240,13 @@ packages:
     resolution: {integrity: sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ==}
     dev: true
 
+  /http_ece/1.1.0:
+    resolution: {integrity: sha512-bptAfCDdPJxOs5zYSe7Y3lpr772s1G346R4Td5LgRUeCwIGpCGDUTJxRrhTNcAXbx37spge0kWEIH7QAYWNTlA==}
+    engines: {node: '>=4'}
+    dependencies:
+      urlsafe-base64: 1.0.0
+    dev: true
+
   /https-proxy-agent/5.0.1:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
     engines: {node: '>= 6'}
@@ -1305,6 +1344,25 @@ packages:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
     dev: true
 
+  /itty-router/2.6.1:
+    resolution: {integrity: sha512-l9gxWe5TOLUESYnBn85Jxd6tIZLWdRX5YKkHIBfSgbNQ7UFPNUGuWihRV+LlEbfJJIzgLmhwAbaWRi5yWJm8kg==}
+    dev: true
+
+  /jwa/2.0.0:
+    resolution: {integrity: sha512-jrZ2Qx916EA+fq9cEAeCROWPTfCwi1IVHqT2tapuqLEVVDKFDENFw1oL+MwrTvH6msKxsd1YTDVw6uKEcsrLEA==}
+    dependencies:
+      buffer-equal-constant-time: 1.0.1
+      ecdsa-sig-formatter: 1.0.11
+      safe-buffer: 5.2.1
+    dev: true
+
+  /jws/4.0.0:
+    resolution: {integrity: sha512-KDncfTmOZoOMTFG4mBlG0qUIOlc03fmzH+ru6RgYVZhPkyiy/92Owlt/8UEN+a4TXR1FQetfIpJE8ApdvdVxTg==}
+    dependencies:
+      jwa: 2.0.0
+      safe-buffer: 5.2.1
+    dev: true
+
   /kleur/4.1.4:
     resolution: {integrity: sha512-8QADVssbrFjivHWQU7KkMgptGTl6WAcSdlbBPY4uNF+mWr6DGcKrvY2w4FQJoXch7+fKMjj0dRrL75vk3k23OA==}
     engines: {node: '>=6'}
@@ -1398,6 +1456,10 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    dev: true
+
+  /minimalistic-assert/1.0.1:
+    resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
     dev: true
 
   /minimatch/3.1.2:
@@ -2239,6 +2301,10 @@ packages:
     resolution: {integrity: sha512-DOE84vZT2fEcl9gqCUTcnAw5ZY5Id55ikUcziSUntuEFL3pRvavg5kwDmTEUJkeCHInTlV/HexFomgYnzO5kdQ==}
     dev: true
 
+  /urlsafe-base64/1.0.0:
+    resolution: {integrity: sha512-RtuPeMy7c1UrHwproMZN9gN6kiZ0SvJwRaEzwZY0j9MypEkFqyBaKv176jvlPtg58Zh36bOkS0NFABXMHvvGCA==}
+    dev: true
+
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
@@ -2265,6 +2331,21 @@ packages:
       rollup: 2.75.7
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
+
+  /web-push/3.5.0:
+    resolution: {integrity: sha512-JC0V9hzKTqlDYJ+LTZUXtW7B175qwwaqzbbMSWDxHWxZvd3xY0C2rcotMGDavub2nAAFw+sXTsqR65/KY2A5AQ==}
+    engines: {node: '>= 6'}
+    hasBin: true
+    dependencies:
+      asn1.js: 5.4.1
+      http_ece: 1.1.0
+      https-proxy-agent: 5.0.1
+      jws: 4.0.0
+      minimist: 1.2.6
+      urlsafe-base64: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /webidl-conversions/3.0.1:

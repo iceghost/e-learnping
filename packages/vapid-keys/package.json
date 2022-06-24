@@ -1,0 +1,8 @@
+{
+  "name": "vapid-keys",
+  "version": "1.0.0",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "private": true,
+  "license": "ISC"
+}

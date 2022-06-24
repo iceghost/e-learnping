@@ -1,6 +1,7 @@
 import { Client, Classification } from 'moodle';
 
 import { startOfQuarter } from 'date-fns';
+import { handleOptions } from './cors';
 
 export interface Env {
     ELEARNING_TOKEN: string;
@@ -21,6 +22,10 @@ export default {
         env: Env,
         ctx: ExecutionContext
     ): Promise<Response> {
+        if (request.method === 'OPTIONS') {
+            return handleOptions(request);
+        }
+
         const moodle = new Client(env.ELEARNING_TOKEN);
 
         const result = await moodle.getUpdatesAndModules(
