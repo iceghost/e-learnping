@@ -1,8 +1,15 @@
 import { Router } from 'itty-router';
-import { Env } from '.';
+import { handleOptions } from './handlers/cors';
+import * as subscription from './handlers/subscription';
+import * as update from './handlers/update';
 
 const router = Router();
 
-router.get('/', (request: Request, env: Env, context: ExecutionContext) => {
-    // now have access to the env (where CF bindings like durables, KV, etc now are)
-});
+// cors
+router.options('*', handleOptions);
+
+// push subscription
+router.post('/subscription', subscription.post);
+router.get('/updates', update.getAll);
+
+export default router;

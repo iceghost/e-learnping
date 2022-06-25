@@ -1,6 +1,6 @@
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,HEAD',
     'Access-Control-Max-Age': '86400',
 };
 
@@ -29,12 +29,6 @@ export function handleOptions(request: Request) {
             headers: respHeaders,
         });
     } else {
-        // Handle standard OPTIONS request.
-        // If you want to allow other HTTP Methods, you can do that here.
-        return new Response(null, {
-            headers: {
-                Allow: 'GET, HEAD, POST, OPTIONS',
-            },
-        });
+        return new Response(null, { headers: { Allow: 'POST, OPTIONS' } });
     }
 }

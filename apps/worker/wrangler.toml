@@ -1,3 +1,8 @@
 name = "worker"
 main = "src/index.ts"
 compatibility_date = "2022-06-23"
+
+[[kv_namespaces]]
+binding = "PUSH_SUBSCRIPTION"
+id = "21a6d6ca421041e99c11443128896d18"
+preview_id = "a9d79b106ea54078ad3d6b033f6e7c9c"

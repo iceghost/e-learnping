@@ -31,14 +31,21 @@ importers:
   apps/worker:
     specifiers:
       '@cloudflare/workers-types': ^3.13.0
+      '@types/itty-router-extras': ^0.4.0
+      '@types/web-push': ^3.3.2
       date-fns: ^2.28.0
       itty-router: ^2.6.1
+      itty-router-extras: ^0.4.2
       moodle: workspace:*
       typescript: ^4.7.4
       web-push: ^3.5.0
       wrangler: ^2.0.15
+    dependencies:
+      '@types/itty-router-extras': 0.4.0
+      itty-router-extras: 0.4.2
     devDependencies:
       '@cloudflare/workers-types': 3.13.0
+      '@types/web-push': 3.3.2
       date-fns: 2.28.0
       itty-router: 2.6.1
       moodle: link:../../packages/moodle
@@ -377,6 +384,12 @@ packages:
       - supports-color
     dev: true
 
+  /@types/itty-router-extras/0.4.0:
+    resolution: {integrity: sha512-IcXmXB8vVbjWy4McZjKzo+3sdQyzMpyHi5mQ4iViu6yX9cS/SVlGR+6H/AgzfG32svaQJeOhl2gfXYwf1AKEgg==}
+    dependencies:
+      itty-router: 2.6.1
+    dev: false
+
   /@types/node/18.0.0:
     resolution: {integrity: sha512-cHlGmko4gWLVI27cGJntjs/Sj8th9aYwplmZFwmmgYQQvL5NUsgVJG7OddLvNfLqYS31KFN0s3qlaD9qCaxACA==}
     dev: true
@@ -393,6 +406,12 @@ packages:
 
   /@types/stack-trace/0.0.29:
     resolution: {integrity: sha512-TgfOX+mGY/NyNxJLIbDWrO9DjGoVSW9+aB8H2yy1fy32jsvxijhmyJI9fDFgvz3YP4lvJaq9DzdR/M1bOgVc9g==}
+    dev: true
+
+  /@types/web-push/3.3.2:
+    resolution: {integrity: sha512-JxWGVL/m7mWTIg4mRYO+A6s0jPmBkr4iJr39DqJpRJAc+jrPiEe1/asmkwerzRon8ZZDxaZJpsxpv0Z18Wo9gw==}
+    dependencies:
+      '@types/node': 18.0.0
     dev: true
 
   /@vercel/nft/0.20.0:
@@ -1344,9 +1363,12 @@ packages:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
     dev: true
 
+  /itty-router-extras/0.4.2:
+    resolution: {integrity: sha512-ppHaBzcTXs7idFSDISehG+8kif2/4aqLCfyY/Y/uIZv79sfEfNmTq9G+rDeqblun/VZRBiXZD8ztYmMS8EOsKw==}
+    dev: false
+
   /itty-router/2.6.1:
     resolution: {integrity: sha512-l9gxWe5TOLUESYnBn85Jxd6tIZLWdRX5YKkHIBfSgbNQ7UFPNUGuWihRV+LlEbfJJIzgLmhwAbaWRi5yWJm8kg==}
-    dev: true
 
   /jwa/2.0.0:
     resolution: {integrity: sha512-jrZ2Qx916EA+fq9cEAeCROWPTfCwi1IVHqT2tapuqLEVVDKFDENFw1oL+MwrTvH6msKxsd1YTDVw6uKEcsrLEA==}

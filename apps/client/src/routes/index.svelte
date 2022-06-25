@@ -1,5 +1,6 @@
 <script>
-    import { post } from '$lib/api';
+    import { BASE, post } from '$lib/api';
+    import { onMount } from 'svelte';
     import { VAPID_PUBLIC_KEY } from 'vapid-keys';
     async function subscribe() {
         const registration = await navigator.serviceWorker.ready;
@@ -21,6 +22,23 @@
         const res = await post('/subscription', subscription.toJSON());
         console.log(res);
     }
+
+    async function getSSE() {
+        const eventSrc = new EventSource(BASE + '/updates');
+
+        eventSrc.addEventListener('message', (e) => {
+            console.log(JSON.parse(e.data));
+        });
+
+        eventSrc.addEventListener('open', (e) => {
+            console.log('open', e);
+        });
+
+        eventSrc.addEventListener('error', (e) => {
+            console.log('error', e);
+            eventSrc.close();
+        });
+    }
 </script>
 
 <h1>Welcome to SvelteKit</h1>
@@ -29,3 +47,4 @@
 </p>
 
 <button on:click={subscribe}>Subscribe</button>
+<button on:click={getSSE}>Get courses content</button>

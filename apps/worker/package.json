@@ -12,11 +12,16 @@
   "license": "ISC",
   "devDependencies": {
     "@cloudflare/workers-types": "^3.13.0",
+    "@types/web-push": "^3.3.2",
     "date-fns": "^2.28.0",
     "itty-router": "^2.6.1",
     "moodle": "workspace:*",
     "typescript": "^4.7.4",
     "web-push": "^3.5.0",
     "wrangler": "^2.0.15"
+  },
+  "dependencies": {
+    "@types/itty-router-extras": "^0.4.0",
+    "itty-router-extras": "^0.4.2"
   }
 }
