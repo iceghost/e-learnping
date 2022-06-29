@@ -19,7 +19,7 @@ export interface CachableWSFunction<P extends any[], R>
     cacheKey(...params: P): string;
 }
 
-export interface Course {
+export type Course = {
     id: number;
     fullname: string;
     coursecategory: string;
