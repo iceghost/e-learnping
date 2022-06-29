@@ -1,14 +1,4 @@
-export interface Course {
-    id: number;
-    fullname: string;
-    coursecategory: string;
-}
-
-export enum Classification {
-    FUTURE = 'future',
-    INPROGRESS = 'inprogress',
-    PAST = 'past',
-}
+import { Classification, Course } from '..';
 
 export const GetEnrolledCourses = {
     encode(classification: Classification) {

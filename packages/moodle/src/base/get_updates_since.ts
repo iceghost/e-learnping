@@ -1,19 +1,4 @@
-export type Update = {
-    // module id
-    id: number;
-    updates: UpdateDetail[];
-};
-
-export type UpdateDetail =
-    | {
-          name: 'configuration';
-          timeupdated: number;
-          timeids?: never;
-      }
-    | {
-          name: string;
-          itemids?: number[];
-      };
+import { Update } from '..';
 
 export const GetUpdatesSince = {
     encode(courseid: number, since: Date) {

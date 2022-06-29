@@ -2,6 +2,16 @@
     import { BASE, post } from '$lib/api';
     import { onMount } from 'svelte';
     import { VAPID_PUBLIC_KEY } from 'vapid-keys';
+    import * as moodle from 'moodle';
+    import { startOfMonth } from 'date-fns';
+    import PQueue from 'p-queue';
+
+    const queue = new PQueue({
+        concurrency: 8,
+        intervalCap: 8,
+        interval: 1000,
+    });
+
     async function subscribe() {
         const registration = await navigator.serviceWorker.ready;
         console.log(await registration.pushManager.permissionState());
@@ -23,21 +33,26 @@
         console.log(res);
     }
 
-    async function getSSE() {
-        const eventSrc = new EventSource(BASE + '/updates');
+    const token = '';
 
-        eventSrc.addEventListener('message', (e) => {
-            console.log(JSON.parse(e.data));
+    const client = new moodle.Client(token);
+
+    async function getCourses() {
+        const courses = await client.getEnrolledCourses(
+            moodle.Classification.INPROGRESS
+        );
+
+        const promises = courses.map(async (course) => {
+            const res = await queue.add(() =>
+                client.getUpdatesAndModules(course.id, new Date(2022, 5, 24))
+            );
+            const filtered = res.filter(({ update }) => update !== undefined);
+            if (filtered.length != 0) {
+                console.log(course.fullname, filtered);
+            }
         });
 
-        eventSrc.addEventListener('open', (e) => {
-            console.log('open', e);
-        });
-
-        eventSrc.addEventListener('error', (e) => {
-            console.log('error', e);
-            eventSrc.close();
-        });
+        await Promise.all(promises);
     }
 </script>
 
@@ -47,4 +62,4 @@
 </p>
 
 <button on:click={subscribe}>Subscribe</button>
-<button on:click={getSSE}>Get courses content</button>
+<button on:click={getCourses}>Get courses content</button>

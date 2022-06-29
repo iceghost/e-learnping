@@ -1,11 +1,7 @@
-export type Module = {
-    id: number;
-    name: string;
-    modname: string;
-};
+import { Module } from '..';
 
 export const GetContents = {
-    encode(courseid: number) {
+    encode(courseid: number, group?: number) {
         return {
             courseid,
             wsfunction: 'core_course_get_contents',
