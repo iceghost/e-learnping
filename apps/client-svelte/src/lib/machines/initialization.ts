@@ -1,16 +1,18 @@
 import { defineContext } from '$lib/context_utils';
 import type { MyDB, DBInstance } from '$lib/db';
-import { openDB, type IDBPDatabase } from 'idb';
-import { useMachine } from '@xstate/svelte';
-import { assign, createMachine } from 'xstate';
-import { escalate, log } from 'xstate/lib/actions';
+import { openDB } from 'idb';
+import { createMachine } from 'xstate';
+import { escalate, log, assign } from 'xstate/lib/actions';
+import { browser } from '$app/env';
+import { goto } from '$app/navigation';
+import type { UseMachineReturn } from './xstate-utils';
 
-const machine = createMachine(
+export const machine = createMachine(
     {
         context: {},
         tsTypes: {} as import('./initialization.typegen').Typegen0,
         schema: {
-            events: {} as { type: never },
+            events: {} as { type: 'Submit token'; data: { token: string } },
             context: {} as {
                 db?: DBInstance;
                 token?: string;
@@ -51,7 +53,6 @@ const machine = createMachine(
                 },
             },
             Database: {
-                entry: 'Save database instance',
                 invoke: {
                     src: 'Get token from database',
                     onDone: [
@@ -62,7 +63,7 @@ const machine = createMachine(
                     ],
                     onError: [
                         {
-                            target: 'Database with no token',
+                            target: 'Redirecting to login',
                         },
                     ],
                 },
@@ -78,6 +79,10 @@ const machine = createMachine(
                     ],
                     onError: [
                         {
+                            cond: 'token is invalid',
+                            target: 'Database with no token',
+                        },
+                        {
                             target: 'Server is down',
                         },
                     ],
@@ -87,13 +92,39 @@ const machine = createMachine(
                 type: 'final',
             },
             'Database with no token': {
-                type: 'final',
+                on: {
+                    'Submit token': {
+                        actions: 'Save token',
+                        target: 'Redirecting to home',
+                    },
+                },
             },
             'Server is down': {
+                type: 'final',
                 entry: 'Send error message',
             },
             'Broken database': {
                 entry: 'Send error message',
+            },
+            'Redirecting to login': {
+                invoke: {
+                    src: 'Redirect',
+                    onDone: [
+                        {
+                            target: 'Database with no token',
+                        },
+                    ],
+                },
+            },
+            'Redirecting to home': {
+                invoke: {
+                    src: 'Redirect',
+                    onDone: [
+                        {
+                            target: 'Database with token',
+                        },
+                    ],
+                },
             },
         },
     },
@@ -114,45 +145,53 @@ const machine = createMachine(
                 }
             }),
         },
+        guards: {
+            'token is invalid': (ctx, e) => {
+                return true;
+            },
+        },
+        services: {
+            'Initialize database': async () => {
+                if (!browser) return Promise.race([]);
+
+                const db = await openDB<MyDB>('elearnping', 1, {
+                    upgrade(db) {
+                        db.createObjectStore('kv');
+                        db.createObjectStore('modules', { keyPath: 'id' });
+                        db.createObjectStore('courses', { keyPath: 'id' });
+
+                        const groupStore = db.createObjectStore('groups', {
+                            keyPath: 'id',
+                        });
+                        groupStore.createIndex('by-courseid', 'courseid', {
+                            unique: true,
+                        });
+                    },
+                });
+                return { db };
+            },
+            'Get token from database': async (ctx) => {
+                const token = await ctx.db!.get('kv', 'token');
+                if (!token) throw new Error();
+                return { token };
+            },
+            'Get user info': async () => {
+                return {};
+            },
+            Redirect: async (_, e) => {
+                if (e.type == 'Submit token') {
+                    await goto('/');
+                } else if (
+                    e.type ==
+                    'error.platform.Initialization.Database:invocation[0]'
+                ) {
+                    await goto('/login');
+                }
+            },
+        },
     }
 );
 
-const service = useMachine(machine, {
-    services: {
-        'Initialize database': async () => {
-            const db = await openDB<MyDB>('elearnping', 1, {
-                upgrade(db) {
-                    db.createObjectStore('kv');
-                    db.createObjectStore('modules', { keyPath: 'id' });
-                    db.createObjectStore('courses', { keyPath: 'id' });
-
-                    const groupStore = db.createObjectStore('groups', {
-                        keyPath: 'id',
-                    });
-                    groupStore.createIndex('by-courseid', 'courseid', {
-                        unique: true,
-                    });
-                },
-            });
-            return { db };
-        },
-        'Get token from database': async (ctx) => {
-            const token = await ctx.db!.get('kv', 'token');
-            if (!token) throw new Error();
-            return { token };
-        },
-        'Get user info': async () => {
-            return {};
-        },
-    },
-});
-
-const [getContext, setContext] = defineContext<typeof service>();
-
-export const setInitContext = () => {
-    return setContext(service);
-};
-
-export const getInitContext = () => {
-    return getContext();
-}
+const [initService, setInitService] =
+    defineContext<UseMachineReturn<typeof machine>>();
+export { initService, setInitService };

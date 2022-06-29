@@ -1,7 +1,18 @@
 <script lang="ts">
-    import { setInitContext } from '$lib/machines/initialization';
+    import { machine, setInitService } from '$lib/machines/initialization';
+    import { useMachine } from '@xstate/svelte';
 
-    const initService = setInitContext();
+    const service = useMachine(machine);
 
-    const initState = initService.state;
+    setInitService(service);
+
+    const initState = service.state;
 </script>
+
+{#if $initState.matches('Database, token with info') || $initState.matches('Database with no token')}
+    <slot />
+{:else}
+    <div>
+        {$initState.value} - {JSON.stringify($initState.context)}
+    </div>
+{/if}
