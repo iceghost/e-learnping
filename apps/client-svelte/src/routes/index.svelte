@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { BASE, post } from '$lib/api';
     import { onMount } from 'svelte';
     import { VAPID_PUBLIC_KEY } from 'vapid-keys';
@@ -12,56 +12,108 @@
         interval: 1000,
     });
 
-    async function subscribe() {
-        const registration = await navigator.serviceWorker.ready;
-        console.log(await registration.pushManager.permissionState());
-        const oldSubscription =
-            await registration.pushManager.getSubscription();
-
-        if (oldSubscription) {
-            // alert('already subscribed :)');
-            // return;
-            oldSubscription.unsubscribe();
-        }
-
-        const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: VAPID_PUBLIC_KEY,
-        });
-
-        const res = await post('/subscription', subscription.toJSON());
-        console.log(res);
-    }
-
     const client = new moodle.Client($session.token);
 
-    async function getCourses() {
+    async function updateCourses() {
         const courses = await client.getEnrolledCourses(
             moodle.Classification.INPROGRESS
         );
 
+        const tx = $session.db.transaction('courses', 'readwrite');
+
         const promises = courses.map(async (course) => {
-            const res = await queue.add(() =>
-                client.getUpdatesAndModules(course.id, new Date(2022, 5, 24))
-            );
-            const filtered = res.filter(({ update }) => update !== undefined);
-            if (filtered.length != 0) {
-                console.log(course.fullname, filtered);
-            }
+            let oldCourse = await tx.store.get(course.id);
+            let updatedAt = oldCourse?.updatedAt || new Date(0);
+            await tx.store.put({ course, updatedAt });
         });
 
+        promises.push(tx.done);
+
+        await Promise.all(promises);
+
+        return courses;
+    }
+
+    async function updateGroups() {
+        const groups = await client.getGroups();
+
+        const tx = $session.db.transaction('groups', 'readwrite');
+
+        const promises = groups.map(async (group) => {
+            await tx.store.put({ group });
+        });
+        promises.push(tx.done);
         await Promise.all(promises);
     }
+
+    async function updateContents() {
+        const courseids = await $session.db.getAllKeys('courses');
+
+        await Promise.all(
+            courseids.map(async (courseid) => {
+                const sections = await queue.add(() =>
+                    client.getContents(courseid)
+                );
+
+                const promises = sections.map(async (section) => {
+                    const moduleTx = $session.db.transaction(
+                        'modules',
+                        'readwrite'
+                    );
+
+                    const promises = section.modules.map(async (module) => {
+                        await moduleTx.store.put({
+                            module,
+                            sectionid: section.id,
+                        });
+                    });
+
+                    promises.push(moduleTx.done);
+
+                    await Promise.all(promises);
+
+                    await $session.db.put('sections', {
+                        section,
+                        courseid,
+                    });
+                });
+
+                return Promise.all(promises);
+            })
+        );
+    }
+
+    const categoriesLoader = async () => {
+        let cursor = await $session.db
+            .transaction('courses')
+            .store.index('by-category')
+            .openCursor();
+        let prevCategory: string | undefined = undefined;
+        const results: { category: string; courses: moodle.Course[] }[] = [];
+        while (cursor) {
+            const category = cursor.key;
+            if (prevCategory !== category) {
+                results.push({ category, courses: [] });
+                prevCategory = category;
+            }
+            results.at(-1)?.courses.push(cursor.value.course);
+            cursor = await cursor.continue();
+        }
+        return results;
+    };
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>
-    Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
-</p>
+<button on:click={updateCourses}>Get courses</button>
+<button on:click={updateGroups}>Get groups</button>
+<button on:click={updateContents}>Get contents</button>
 
-<p>
-    {$session.info.fullname}
-</p>
-
-<button on:click={subscribe}>Subscribe</button>
-<button on:click={getCourses}>Get courses content</button>
+{#await categoriesLoader() then categories}
+    {#each categories as { category, courses }}
+        <p>{category}</p>
+        <ul>
+            {#each courses as course}
+                <li>{course.fullname}</li>
+            {/each}
+        </ul>
+    {/each}
+{/await}

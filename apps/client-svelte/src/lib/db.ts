@@ -1,5 +1,5 @@
 import type { DBSchema, IDBPDatabase } from 'idb';
-import type { Course, Group, Module } from 'moodle';
+import type { Course, Group, Module, Section, Update } from 'moodle';
 
 export type DBInstance = IDBPDatabase<MyDB>;
 
@@ -8,28 +8,45 @@ export interface MyDB extends DBSchema {
         key: string;
         value: string;
     };
+    updates: {
+        value: {
+            update: Update;
+            courseid: number;
+            since: Date;
+            until: Date;
+        };
+        key: number;
+        indexes: { 'by-courseid': number };
+    };
     modules: {
         value: {
             module: Module;
-            expiresAt: Date;
+            sectionid: number;
         };
         key: number;
-        indexes: { 'by-expiresAt': Date };
+        indexes: { 'by-sectionid': number };
+    };
+    sections: {
+        value: {
+            section: Section;
+            courseid: number;
+        };
+        key: number;
+        indexes: { 'by-courseid': number };
     };
     courses: {
         value: {
             course: Course;
-            expiresAt: Date;
+            updatedAt: Date;
         };
         key: number;
-        indexes: { 'by-expiresAt': Date };
+        indexes: { 'by-category': string };
     };
     groups: {
         value: {
             group: Group;
-            expiresAt: Date;
         };
         key: number;
-        indexes: { 'by-expiresAt': Date; 'by-courseid': number };
+        indexes: { 'by-courseid': number };
     };
 }

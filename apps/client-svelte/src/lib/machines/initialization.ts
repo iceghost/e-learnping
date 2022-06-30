@@ -184,13 +184,21 @@ export const machine = createMachine(
                     upgrade(db) {
                         db.createObjectStore('kv');
 
+                        db.createObjectStore('updates', {
+                            autoIncrement: true,
+                        }).createIndex('by-courseid', 'courseid');
+
                         db.createObjectStore('modules', {
                             keyPath: 'module.id',
-                        }).createIndex('by-expiresAt', 'expiresAt');
+                        }).createIndex('by-sectionid', 'sectionid');
+
+                        db.createObjectStore('sections', {
+                            keyPath: 'section.id',
+                        }).createIndex('by-courseid', 'courseid');
 
                         db.createObjectStore('courses', {
                             keyPath: 'course.id',
-                        }).createIndex('by-expiresAt', 'expiresAt');
+                        }).createIndex('by-category', 'course.coursecategory');
 
                         db.createObjectStore('groups', {
                             keyPath: 'group.id',
