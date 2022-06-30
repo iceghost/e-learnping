@@ -41,17 +41,24 @@ export type UpdateDetail =
     | {
           name: 'configuration';
           timeupdated: number;
-          timeids?: never;
+          itemids?: never;
       }
     | {
           name: Omit<string, 'configuration'>;
           itemids?: number[];
       };
 
+export type Section = {
+    id: number;
+    name: string;
+    modules: Module[];
+};
+
 export type Module = {
     id: number;
     name: string;
     modname: string;
+    description: string;
 };
 
 export type Group = {

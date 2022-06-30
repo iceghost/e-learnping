@@ -76,28 +76,6 @@ export class Client {
         return this.call(GetContents);
     }
 
-    async getUpdatesAndModules(
-        courseid: number,
-        since: Date
-    ): Promise<{ module: Module; update?: Update }[]> {
-        const [modules, updates] = await Promise.all([
-            this.getContents(courseid),
-            this.getUpdatesSince(courseid, since),
-        ]);
-
-        let i = 0;
-        return modules.map((module) => {
-            if (i < updates.length) {
-                const update = updates[i];
-                if (update.id == module.id) {
-                    i++;
-                    return { module, update };
-                }
-            }
-            return { module };
-        });
-    }
-
     get getSiteInfo() {
         return this.call(GetSiteInfo);
     }

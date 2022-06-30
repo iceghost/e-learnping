@@ -1,4 +1,4 @@
-import { Module } from '..';
+import { Section } from '..';
 
 export const GetContents = {
     encode(courseid: number, group?: number) {
@@ -7,7 +7,7 @@ export const GetContents = {
             wsfunction: 'core_course_get_contents',
         };
     },
-    decode(body: Array<{ modules: Module[] }>): Module[] {
-        return body.map((e) => e.modules).flat();
+    decode(body: Section[]): Section[] {
+        return body;
     },
 };
