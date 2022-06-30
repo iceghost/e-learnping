@@ -44,7 +44,7 @@ export type UpdateDetail =
           timeids?: never;
       }
     | {
-          name: string;
+          name: Omit<string, 'configuration'>;
           itemids?: number[];
       };
 
