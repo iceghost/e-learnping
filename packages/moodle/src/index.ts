@@ -23,7 +23,7 @@ export type Course = {
     id: number;
     fullname: string;
     coursecategory: string;
-}
+};
 
 export enum Classification {
     FUTURE = 'future',
@@ -58,4 +58,10 @@ export type Group = {
     id: number;
     name: string;
     courseid: number;
+};
+
+export type Info = {
+    firstname: string;
+    lastname: string;
+    fullname: string;
 };

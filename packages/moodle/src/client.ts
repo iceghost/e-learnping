@@ -3,6 +3,7 @@ import { GetEnrolledCourses } from './base/get_enrolled_courses';
 import { GetContents } from './base/get_contents';
 import { GetUpdatesSince } from './base/get_updates_since';
 import { GetGroups } from './base/get_groups';
+import { GetSiteInfo } from './base/get_site_info';
 
 export class Client {
     baseUrl: URL;
@@ -40,7 +41,11 @@ export class Client {
 
             const body = await res.json();
 
-            return await func.decode(body); 
+            if (body['errorcode']) {
+                throw body;
+            }
+
+            return await func.decode(body);
         };
     }
 
@@ -91,5 +96,9 @@ export class Client {
             }
             return { module };
         });
+    }
+
+    get getSiteInfo() {
+        return this.call(GetSiteInfo);
     }
 }
