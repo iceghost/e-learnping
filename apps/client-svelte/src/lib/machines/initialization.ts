@@ -2,10 +2,11 @@ import { defineContext } from '$lib/context_utils';
 import type { MyDB, DBInstance } from '$lib/db';
 import { openDB } from 'idb';
 import { createMachine } from 'xstate';
-import { escalate, log, assign } from 'xstate/lib/actions';
+import { escalate, assign } from 'xstate/lib/actions';
 import { browser } from '$app/env';
 import { goto } from '$app/navigation';
 import type { UseMachineReturn } from './xstate-utils';
+import { Client, type Info } from 'moodle';
 
 export const machine = createMachine(
     {
@@ -16,6 +17,7 @@ export const machine = createMachine(
             context: {} as {
                 db?: DBInstance;
                 token?: string;
+                info?: Info;
             },
             services: {} as {
                 'Initialize database': {
@@ -29,10 +31,16 @@ export const machine = createMachine(
                     };
                 };
                 'Get user info': {
-                    data: {};
+                    data: {
+                        info: Info;
+                    };
+                };
+                'Store token and info': {
+                    data: void;
                 };
             },
         },
+
         id: 'Initialization',
         initial: 'No database',
         states: {
@@ -80,7 +88,7 @@ export const machine = createMachine(
                     onError: [
                         {
                             cond: 'token is invalid',
-                            target: 'Database with no token',
+                            target: 'Redirecting to login',
                         },
                         {
                             target: 'Server is down',
@@ -89,7 +97,19 @@ export const machine = createMachine(
                 },
             },
             'Database, token with info': {
-                type: 'final',
+                invoke: {
+                    src: 'Store token and info',
+                    onDone: [
+                        {
+                            target: 'Done',
+                        },
+                    ],
+                    onError: [
+                        {
+                            target: 'Broken database',
+                        },
+                    ],
+                },
             },
             'Database with no token': {
                 on: {
@@ -126,12 +146,15 @@ export const machine = createMachine(
                     ],
                 },
             },
+            Done: {
+                type: 'final',
+            },
         },
     },
     {
         actions: {
             'Save database instance': assign({ db: (_, e) => e.data.db }),
-            'Save user info': log(),
+            'Save user info': assign({ info: (_, e) => e.data.info }),
             'Save token': assign({ token: (_, e) => e.data.token }),
             'Send error message': escalate((_, e) => {
                 switch (e.type) {
@@ -146,8 +169,11 @@ export const machine = createMachine(
             }),
         },
         guards: {
-            'token is invalid': (ctx, e) => {
-                return true;
+            'token is invalid': (_, e) => {
+                const errorcode = (
+                    e.data as Record<string, string | undefined>
+                )['errorcode'];
+                return errorcode !== undefined && errorcode === 'invalidtoken';
             },
         },
         services: {
@@ -157,13 +183,18 @@ export const machine = createMachine(
                 const db = await openDB<MyDB>('elearnping', 1, {
                     upgrade(db) {
                         db.createObjectStore('kv');
-                        db.createObjectStore('modules', { keyPath: 'id' });
-                        db.createObjectStore('courses', { keyPath: 'id' });
 
-                        const groupStore = db.createObjectStore('groups', {
-                            keyPath: 'id',
-                        });
-                        groupStore.createIndex('by-courseid', 'courseid', {
+                        db.createObjectStore('modules', {
+                            keyPath: 'module.id',
+                        }).createIndex('by-expiresAt', 'expiresAt');
+
+                        db.createObjectStore('courses', {
+                            keyPath: 'course.id',
+                        }).createIndex('by-expiresAt', 'expiresAt');
+
+                        db.createObjectStore('groups', {
+                            keyPath: 'group.id',
+                        }).createIndex('by-courseid', 'courseid', {
                             unique: true,
                         });
                     },
@@ -175,18 +206,21 @@ export const machine = createMachine(
                 if (!token) throw new Error();
                 return { token };
             },
-            'Get user info': async () => {
-                return {};
+            'Get user info': async (ctx) => {
+                const moodle = new Client(ctx.token!);
+                const info = await moodle.getSiteInfo();
+                return { info };
             },
             Redirect: async (_, e) => {
                 if (e.type == 'Submit token') {
                     await goto('/');
-                } else if (
-                    e.type ==
-                    'error.platform.Initialization.Database:invocation[0]'
-                ) {
+                } else {
                     await goto('/login');
                 }
+            },
+            'Store token and info': async ({ db, token, info }) => {
+                await db!.put('kv', token!, 'token');
+                await db!.put('kv', JSON.stringify(info!), 'info');
             },
         },
     }

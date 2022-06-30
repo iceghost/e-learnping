@@ -3,8 +3,8 @@
     import { onMount } from 'svelte';
     import { VAPID_PUBLIC_KEY } from 'vapid-keys';
     import * as moodle from 'moodle';
-    import { startOfMonth } from 'date-fns';
     import PQueue from 'p-queue';
+    import { session } from '$app/stores';
 
     const queue = new PQueue({
         concurrency: 8,
@@ -33,9 +33,7 @@
         console.log(res);
     }
 
-    const token = '';
-
-    const client = new moodle.Client(token);
+    const client = new moodle.Client($session.token);
 
     async function getCourses() {
         const courses = await client.getEnrolledCourses(
@@ -59,6 +57,10 @@
 <h1>Welcome to SvelteKit</h1>
 <p>
     Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
+</p>
+
+<p>
+    {$session.info.fullname}
 </p>
 
 <button on:click={subscribe}>Subscribe</button>

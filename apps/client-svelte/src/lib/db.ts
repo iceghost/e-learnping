@@ -9,16 +9,27 @@ export interface MyDB extends DBSchema {
         value: string;
     };
     modules: {
-        value: Module;
+        value: {
+            module: Module;
+            expiresAt: Date;
+        };
         key: number;
+        indexes: { 'by-expiresAt': Date };
     };
     courses: {
-        value: Course;
+        value: {
+            course: Course;
+            expiresAt: Date;
+        };
         key: number;
+        indexes: { 'by-expiresAt': Date };
     };
     groups: {
-        value: Group;
+        value: {
+            group: Group;
+            expiresAt: Date;
+        };
         key: number;
-        indexes: { 'by-courseid': number };
+        indexes: { 'by-expiresAt': Date; 'by-courseid': number };
     };
 }

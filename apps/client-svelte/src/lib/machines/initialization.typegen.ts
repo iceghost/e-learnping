@@ -10,7 +10,8 @@ export interface Typegen0 {
     "Save user info": "done.invoke.Initialization.Database with token:invocation[0]";
     "Send error message":
       | "error.platform.Initialization.Database with token:invocation[0]"
-      | "error.platform.Initialization.No database:invocation[0]";
+      | "error.platform.Initialization.No database:invocation[0]"
+      | "error.platform.Initialization.Database, token with info:invocation[0]";
   };
   internalEvents: {
     "done.invoke.Initialization.No database:invocation[0]": {
@@ -36,6 +37,10 @@ export interface Typegen0 {
       type: "error.platform.Initialization.No database:invocation[0]";
       data: unknown;
     };
+    "error.platform.Initialization.Database, token with info:invocation[0]": {
+      type: "error.platform.Initialization.Database, token with info:invocation[0]";
+      data: unknown;
+    };
     "done.invoke.Initialization.Redirecting to home:invocation[0]": {
       type: "done.invoke.Initialization.Redirecting to home:invocation[0]";
       data: unknown;
@@ -51,6 +56,7 @@ export interface Typegen0 {
     "Initialize database": "done.invoke.Initialization.No database:invocation[0]";
     "Get token from database": "done.invoke.Initialization.Database:invocation[0]";
     "Get user info": "done.invoke.Initialization.Database with token:invocation[0]";
+    "Store token and info": "done.invoke.Initialization.Database, token with info:invocation[0]";
     Redirect:
       | "done.invoke.Initialization.Redirecting to login:invocation[0]"
       | "done.invoke.Initialization.Redirecting to home:invocation[0]";
@@ -69,7 +75,9 @@ export interface Typegen0 {
       | "done.invoke.Initialization.Redirecting to home:invocation[0]";
     Redirect:
       | "error.platform.Initialization.Database:invocation[0]"
+      | "error.platform.Initialization.Database with token:invocation[0]"
       | "Submit token";
+    "Store token and info": "done.invoke.Initialization.Database with token:invocation[0]";
   };
   eventsCausingGuards: {
     "token is invalid": "error.platform.Initialization.Database with token:invocation[0]";
@@ -84,6 +92,7 @@ export interface Typegen0 {
     | "Server is down"
     | "Broken database"
     | "Redirecting to login"
-    | "Redirecting to home";
+    | "Redirecting to home"
+    | "Done";
   tags: never;
 }
