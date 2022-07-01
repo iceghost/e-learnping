@@ -123,19 +123,21 @@
     };
 </script>
 
-<button on:click={updateCourses}>Get courses</button>
-<button on:click={updateGroups}>Get groups</button>
-<button on:click={updateContents}>Get contents</button>
+<dir class="bg-sky-50 shadow-sm max-w-xl rounded-md">
+    <button on:click={updateCourses}>Get courses</button>
+    <button on:click={updateGroups}>Get groups</button>
+    <button on:click={updateContents}>Get contents</button>
 
-{#await categoriesLoader() then categories}
-    {#each categories as { category, courses }}
-        <p>{category}</p>
-        <ul>
-            {#each courses as course}
-                <li>
-                    <CourseName {course} />
-                </li>
-            {/each}
-        </ul>
-    {/each}
-{/await}
+    {#await categoriesLoader() then categories}
+        {#each categories as { category, courses }}
+            <p>{category}</p>
+            <ul>
+                {#each courses as course}
+                    <li>
+                        <CourseName {course} />
+                    </li>
+                {/each}
+            </ul>
+        {/each}
+    {/await}
+</dir>

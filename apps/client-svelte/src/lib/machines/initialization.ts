@@ -218,6 +218,7 @@ export const machine = createMachine(
             },
             'Get token from database': async (ctx) => {
                 const token = await ctx.db!.get('kv', 'token');
+                await delay(1000);
                 if (!token) throw new Error();
                 return { token };
             },
@@ -240,6 +241,9 @@ export const machine = createMachine(
         },
     }
 );
+
+const delay = (ms: number) =>
+    new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
 
 const [initService, setInitService] =
     defineContext<UseMachineReturn<typeof machine>>();
