@@ -73,7 +73,7 @@
                     await Promise.all(promises);
 
                     await $session.db.put('sections', {
-                        section,
+                        section: { ...section, modules: [] },
                         courseid,
                     });
                 });
@@ -84,6 +84,7 @@
     }
 
     const categoriesLoader = async () => {
+        const begin = new Date();
         let cursor = await $session.db
             .transaction('courses')
             .store.index('by-category')
@@ -99,6 +100,7 @@
             results.at(-1)?.courses.push(cursor.value.course);
             cursor = await cursor.continue();
         }
+        console.log(Date.now() - begin.getTime());
         return results;
     };
 </script>
@@ -112,7 +114,11 @@
         <p>{category}</p>
         <ul>
             {#each courses as course}
-                <li>{course.fullname}</li>
+                <li>
+                    <a href="/course/{course.id}">
+                        {course.fullname}
+                    </a>
+                </li>
             {/each}
         </ul>
     {/each}
