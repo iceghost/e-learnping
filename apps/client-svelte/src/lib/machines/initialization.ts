@@ -198,7 +198,14 @@ export const machine = createMachine(
 
                         db.createObjectStore('courses', {
                             keyPath: 'course.id',
-                        }).createIndex('by-category', 'course.coursecategory');
+                        }).createIndex('by-semester-and-code', [
+                            'nameParts.semester',
+                            'nameParts.code',
+                        ]);
+
+                        db.createObjectStore('categories', {
+                            keyPath: 'coursecategory',
+                        }).createIndex('by-semester', 'semester');
 
                         db.createObjectStore('groups', {
                             keyPath: 'group.id',

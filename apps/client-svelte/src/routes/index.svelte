@@ -1,10 +1,13 @@
 <script lang="ts">
+    import CourseName from './_CourseName.svelte';
+
     import { BASE, post } from '$lib/api';
     import { onMount } from 'svelte';
     import { VAPID_PUBLIC_KEY } from 'vapid-keys';
     import * as moodle from 'moodle';
     import PQueue from 'p-queue';
     import { session } from '$app/stores';
+    import { getSemester, parseCategory, parseCourseName } from '$lib/parse';
 
     const queue = new PQueue({
         concurrency: 8,
@@ -19,15 +22,27 @@
             moodle.Classification.INPROGRESS
         );
 
-        const tx = $session.db.transaction('courses', 'readwrite');
-
         const promises = courses.map(async (course) => {
+            const tx = $session.db.transaction('courses', 'readwrite');
+
+            const nameParts = parseCourseName(course.fullname);
+
+            // don't overwrite updateAt field
             let oldCourse = await tx.store.get(course.id);
             let updatedAt = oldCourse?.updatedAt || new Date(0);
-            await tx.store.put({ course, updatedAt });
-        });
 
-        promises.push(tx.done);
+            await tx.store.put({ course, nameParts, updatedAt });
+            await tx.done;
+
+            const semester = getSemester(course.coursecategory);
+            const { name, translation } = parseCategory(course.coursecategory);
+            $session.db.put('categories', {
+                coursecategory: course.coursecategory,
+                name,
+                translation,
+                semester,
+            });
+        });
 
         await Promise.all(promises);
 
@@ -87,14 +102,17 @@
         const begin = new Date();
         let cursor = await $session.db
             .transaction('courses')
-            .store.index('by-category')
-            .openCursor();
+            .store.index('by-semester-and-code')
+            .openCursor(null, 'prev');
         let prevCategory: string | undefined = undefined;
         const results: { category: string; courses: moodle.Course[] }[] = [];
         while (cursor) {
-            const category = cursor.key;
+            const category = cursor.value.course.coursecategory;
             if (prevCategory !== category) {
-                results.push({ category, courses: [] });
+                results.push({
+                    category,
+                    courses: [],
+                });
                 prevCategory = category;
             }
             results.at(-1)?.courses.push(cursor.value.course);
@@ -115,9 +133,7 @@
         <ul>
             {#each courses as course}
                 <li>
-                    <a href="/course/{course.id}">
-                        {course.fullname}
-                    </a>
+                    <CourseName {course} />
                 </li>
             {/each}
         </ul>

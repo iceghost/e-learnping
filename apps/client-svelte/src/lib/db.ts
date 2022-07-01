@@ -37,10 +37,26 @@ export interface MyDB extends DBSchema {
     courses: {
         value: {
             course: Course;
+            nameParts: {
+                name: string;
+                code: string;
+                class: string;
+                semester: string;
+            };
             updatedAt: Date;
         };
         key: number;
-        indexes: { 'by-category': string };
+        indexes: { 'by-semester-and-code': [string, string] };
+    };
+    categories: {
+        value: {
+            coursecategory: string;
+            name: string;
+            translation: string;
+            semester: number;
+        };
+        key: string;
+        indexes: { 'by-semester': number };
     };
     groups: {
         value: {
