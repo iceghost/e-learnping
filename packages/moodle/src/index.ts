@@ -58,6 +58,7 @@ export type Module = {
     id: number;
     name: string;
     modname: string;
+    modicon: string;
     description: string;
 };
 
