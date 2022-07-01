@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '../app.css';
     import { machine, setInitService } from '$lib/machines/initialization';
     import { useMachine } from '@xstate/svelte';
     import { session } from '$app/stores';
