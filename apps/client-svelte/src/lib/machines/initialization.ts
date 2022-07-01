@@ -1,6 +1,6 @@
 import { defineContext } from '$lib/context_utils';
-import type { MyDB, DBInstance } from '$lib/db';
-import { openDB } from 'idb';
+import { type MyDB, type DBInstance, initDB } from '$lib/db';
+import { openDB } from 'idb/with-async-ittr';
 import { createMachine } from 'xstate';
 import { escalate, assign } from 'xstate/lib/actions';
 import { browser } from '$app/env';
@@ -178,42 +178,7 @@ export const machine = createMachine(
         },
         services: {
             'Initialize database': async () => {
-                if (!browser) return Promise.race([]);
-
-                const db = await openDB<MyDB>('elearnping', 1, {
-                    upgrade(db) {
-                        db.createObjectStore('kv');
-
-                        db.createObjectStore('updates', {
-                            autoIncrement: true,
-                        }).createIndex('by-courseid', 'courseid');
-
-                        db.createObjectStore('modules', {
-                            keyPath: 'module.id',
-                        }).createIndex('by-sectionid', 'sectionid');
-
-                        db.createObjectStore('sections', {
-                            keyPath: 'section.id',
-                        }).createIndex('by-courseid', 'courseid');
-
-                        db.createObjectStore('courses', {
-                            keyPath: 'course.id',
-                        }).createIndex('by-semester-and-code', [
-                            'nameParts.semester',
-                            'nameParts.code',
-                        ]);
-
-                        db.createObjectStore('categories', {
-                            keyPath: 'coursecategory',
-                        }).createIndex('by-semester', 'semester');
-
-                        db.createObjectStore('groups', {
-                            keyPath: 'group.id',
-                        }).createIndex('by-courseid', 'courseid', {
-                            unique: true,
-                        });
-                    },
-                });
+                const db = await initDB();
                 return { db };
             },
             'Get token from database': async (ctx) => {

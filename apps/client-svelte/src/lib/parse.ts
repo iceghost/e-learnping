@@ -1,4 +1,4 @@
-const courseRegex = /^(.*)\W*\((.*)\)\W*\_(.*)\W*(?:\((.*)\))?$/;
+const courseRegex = /^(.*)\W*\((.*)\)\W*\_([^(]*)\W*(?:\((.*)\))?$/;
 
 /**
  * Parse course name into parts:

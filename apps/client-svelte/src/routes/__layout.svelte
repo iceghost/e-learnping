@@ -22,11 +22,6 @@
     }
 </script>
 
-<svelte:head>
-    <link rel="preload" as="image" href="/background.jpg" />
-    <link rel="preload" as="image" href="/loading.gif" />
-</svelte:head>
-
 <div
     class="-z-10 fixed inset-0 bg-sky-700
     bg-[url('/background.jpg')] bg-cover bg-blend-luminosity
