@@ -17,7 +17,7 @@ export interface MyDB extends DBSchema {
             since: Date;
             until: Date;
         };
-        key: number;
+        key: [number, Date];
         indexes: { 'by-courseid': number };
     };
     modules: {
@@ -45,7 +45,8 @@ export interface MyDB extends DBSchema {
                 class: string;
                 semester: string;
             };
-            updatedAt: Date;
+            refreshedAt: Date;
+            nextRefreshAt: Date;
             hidden: boolean;
         };
         key: number;
@@ -84,7 +85,7 @@ export async function initDB() {
             db.createObjectStore('kv');
 
             db.createObjectStore('updates', {
-                autoIncrement: true,
+                keyPath: ['update.id', 'since'],
             }).createIndex('by-courseid', 'courseid');
 
             db.createObjectStore('modules', {

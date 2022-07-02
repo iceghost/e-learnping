@@ -10,6 +10,7 @@ export interface Typegen0 {
     "Save user info": "done.invoke.Initialization.Database with token:invocation[0]";
     "Send error message":
       | "error.platform.Initialization.Database with token:invocation[0]"
+      | "error.platform.Initialization.User is authenticated:invocation[0]"
       | "error.platform.Initialization.No database:invocation[0]"
       | "error.platform.Initialization.Database, token with info:invocation[0]";
   };
@@ -33,6 +34,10 @@ export interface Typegen0 {
       type: "error.platform.Initialization.Database with token:invocation[0]";
       data: unknown;
     };
+    "error.platform.Initialization.User is authenticated:invocation[0]": {
+      type: "error.platform.Initialization.User is authenticated:invocation[0]";
+      data: unknown;
+    };
     "error.platform.Initialization.No database:invocation[0]": {
       type: "error.platform.Initialization.No database:invocation[0]";
       data: unknown;
@@ -50,6 +55,11 @@ export interface Typegen0 {
       type: "error.platform.Initialization.Database:invocation[0]";
       data: unknown;
     };
+    "done.invoke.Initialization.Database, token with info:invocation[0]": {
+      type: "done.invoke.Initialization.Database, token with info:invocation[0]";
+      data: unknown;
+      __tip: "See the XState TS docs to learn how to strongly type this.";
+    };
     "xstate.init": { type: "xstate.init" };
   };
   invokeSrcNameMap: {
@@ -60,6 +70,7 @@ export interface Typegen0 {
     Redirect:
       | "done.invoke.Initialization.Redirecting to login:invocation[0]"
       | "done.invoke.Initialization.Redirecting to home:invocation[0]";
+    "Refresh database": "done.invoke.Initialization.User is authenticated:invocation[0]";
   };
   missingImplementations: {
     actions: never;
@@ -78,6 +89,7 @@ export interface Typegen0 {
       | "error.platform.Initialization.Database with token:invocation[0]"
       | "Submit token";
     "Store token and info": "done.invoke.Initialization.Database with token:invocation[0]";
+    "Refresh database": "done.invoke.Initialization.Database, token with info:invocation[0]";
   };
   eventsCausingGuards: {
     "token is invalid": "error.platform.Initialization.Database with token:invocation[0]";
@@ -93,6 +105,7 @@ export interface Typegen0 {
     | "Broken database"
     | "Redirecting to login"
     | "Redirecting to home"
+    | "User is authenticated"
     | "Done";
   tags: never;
 }

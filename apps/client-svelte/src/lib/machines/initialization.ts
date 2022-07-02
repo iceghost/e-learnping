@@ -7,40 +7,10 @@ import { browser } from '$app/env';
 import { goto } from '$app/navigation';
 import type { UseMachineReturn } from './xstate-utils';
 import { Client, type Info } from 'moodle';
+import { update } from './update';
 
 export const machine = createMachine(
     {
-        context: {},
-        tsTypes: {} as import('./initialization.typegen').Typegen0,
-        schema: {
-            events: {} as { type: 'Submit token'; data: { token: string } },
-            context: {} as {
-                db?: DBInstance;
-                token?: string;
-                info?: Info;
-            },
-            services: {} as {
-                'Initialize database': {
-                    data: {
-                        db: DBInstance;
-                    };
-                };
-                'Get token from database': {
-                    data: {
-                        token: string;
-                    };
-                };
-                'Get user info': {
-                    data: {
-                        info: Info;
-                    };
-                };
-                'Store token and info': {
-                    data: void;
-                };
-            },
-        },
-
         id: 'Initialization',
         initial: 'No database',
         states: {
@@ -101,7 +71,7 @@ export const machine = createMachine(
                     src: 'Store token and info',
                     onDone: [
                         {
-                            target: 'Done',
+                            target: 'User is authenticated',
                         },
                     ],
                     onError: [
@@ -146,8 +116,56 @@ export const machine = createMachine(
                     ],
                 },
             },
+            'User is authenticated': {
+                invoke: {
+                    src: 'Refresh database',
+                    onDone: [
+                        {
+                            target: 'Done',
+                        },
+                    ],
+                    onError: [
+                        {
+                            target: 'Server is down',
+                        },
+                    ],
+                },
+            },
             Done: {
                 type: 'final',
+            },
+        },
+        context: {},
+        tsTypes: {} as import('./initialization.typegen').Typegen0,
+        schema: {
+            events: {} as { type: 'Submit token'; data: { token: string } },
+            context: {} as {
+                db?: DBInstance;
+                token?: string;
+                info?: Info;
+            },
+            services: {} as {
+                'Initialize database': {
+                    data: {
+                        db: DBInstance;
+                    };
+                };
+                'Get token from database': {
+                    data: {
+                        token: string;
+                    };
+                };
+                'Get user info': {
+                    data: {
+                        info: Info;
+                    };
+                };
+                'Store token and info': {
+                    data: void;
+                };
+                'Refresh database': {
+                    data: void;
+                };
             },
         },
     },
@@ -183,7 +201,7 @@ export const machine = createMachine(
             },
             'Get token from database': async (ctx) => {
                 const token = await ctx.db!.get('kv', 'token');
-                await delay(1000);
+                // await delay(1000);
                 if (!token) throw new Error();
                 return { token };
             },
@@ -202,6 +220,9 @@ export const machine = createMachine(
             'Store token and info': async ({ db, token, info }) => {
                 await db!.put('kv', token!, 'token');
                 await db!.put('kv', JSON.stringify(info!), 'info');
+            },
+            'Refresh database': async ({ db, token }) => {
+                await update(new Client(token!), db!);
             },
         },
     }
