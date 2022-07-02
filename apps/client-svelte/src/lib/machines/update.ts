@@ -110,6 +110,7 @@ export async function update(client: moodle.Client, db: DBInstance) {
             courseid: course.course.id,
             since: course.refreshedAt,
             until: now,
+            read: false,
         });
     }
 

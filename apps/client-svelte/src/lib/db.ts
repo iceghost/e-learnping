@@ -16,6 +16,7 @@ export interface MyDB extends DBSchema {
             courseid: number;
             since: Date;
             until: Date;
+            read: boolean;
         };
         key: [number, Date];
         indexes: { 'by-courseid': number };

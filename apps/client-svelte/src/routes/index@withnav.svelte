@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { categories, updateCategory } from '$lib/stores/category';
+    import { updateCategory } from '$lib/stores/category';
     import { courses } from '$lib/stores/course';
 
     let editMode = false;
 </script>
 
-{#each $categories as { hidden, coursecategory, name }}
+{#each $courses as { category: { hidden, coursecategory, name }, courses }}
     {#if !hidden || editMode}
         <h3
             class="font-bold text-sky-800 py-0.5 px-2 mt-3 mb-1 border-b-2 border-slate-300 bg-slate-100"
@@ -30,9 +30,9 @@
             {/if}
         </h3>
     {/if}
-    {#if !editMode && !hidden && $courses[coursecategory]}
+    {#if !editMode && !hidden}
         <ul class="space-y-2">
-            {#each $courses[coursecategory] as { course, nameParts: { class: c, code, name, semester } }}
+            {#each courses as { course, nameParts: { class: c, code, name } }}
                 <li>
                     <p
                         class="underline decoration-slate-300 underline-offset-1"

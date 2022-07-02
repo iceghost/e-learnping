@@ -1,28 +1,33 @@
 import { db, type MyDB } from '$lib/db';
 import { derived, writable } from 'svelte/store';
-import { categories } from './category';
+import { categories, type DBCategory } from './category';
 
-export const courses = writable<Record<string, MyDB['courses']['value'][]>>(
-    {},
-    (set) => {
-        derived([db, categories], (i) => i).subscribe(
-            async ([$db, $categories]) => {
-                const courses = await Promise.all(
-                    $categories.map(async ({ coursecategory }) => {
-                        const courses = await $db
-                            .transaction('courses')
-                            .store.index('by-category-and-code')
-                            .getAll(
-                                IDBKeyRange.bound(
-                                    [coursecategory, ''],
-                                    [coursecategory, 'ZZ9999']
-                                )
-                            );
-                        return [coursecategory, courses] as const;
-                    })
-                );
-                set(Object.fromEntries(courses));
+export type DBCourse = MyDB['courses']['value'];
+
+export const courses = writable<
+    Array<{
+        category: DBCategory;
+        courses: DBCourse[];
+    }>
+>([], (set) => {
+    return derived([db, categories], (i) => i).subscribe(
+        async ([$db, $categories]) => {
+            const courses = await Promise.all($categories.map(getCourses));
+            set(courses);
+
+            async function getCourses(category: DBCategory) {
+                const courses = [];
+                for await (const cursor of $db
+                    .transaction('courses')
+                    .store.index('by-category-and-code')
+                    .iterate(
+                        IDBKeyRange.lowerBound([category.coursecategory])
+                    )) {
+                    if (cursor.key[0] !== category.coursecategory) break;
+                    courses.push(cursor.value);
+                }
+                return { category, courses };
             }
-        );
-    }
-);
+        }
+    );
+});

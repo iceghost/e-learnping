@@ -5,6 +5,7 @@
     import { session } from '$app/stores';
     import Logo from '$lib/Logo.svelte';
     import { fly } from 'svelte/transition';
+    import { readable } from 'svelte/store';
 
     const service = useMachine(machine);
     const initState = service.state;
@@ -21,6 +22,23 @@
             session.set({ db, token, info });
         }
     }
+
+    const encouragement = readable('', (set) => {
+        const list = [
+            '(đợi chút...)',
+            '(chắc là một chút nữa thôi...)',
+            '(một tí nữa...)',
+        ];
+
+        let i = 0;
+        const handle = setInterval(() => {
+            let oldi = i;
+            while (i == oldi) i = Math.trunc(Math.random() * list.length);
+            set(list[i]);
+        }, 10000);
+
+        return () => clearInterval(handle);
+    });
 </script>
 
 <div
@@ -66,7 +84,7 @@
                     {:else if $initState.matches('Database, token with info')}
                         Lưu token...
                     {:else if $initState.matches('User is authenticated')}
-                        Tải dữ liệu từ web trường...
+                        Tải dữ liệu từ web trường...<br />{$encouragement}
                     {:else if $initState.matches('Broken database')}
                         IndexedDB xài không được :(
                     {:else if $initState.matches('Server is down')}
