@@ -1,35 +1,9 @@
 <script lang="ts">
-    import * as moodle from 'moodle';
-    import PQueue from 'p-queue';
-    import { session } from '$app/stores';
     import { categories, updateCategory } from '$lib/stores/category';
     import { courses } from '$lib/stores/course';
-    import { update } from '$lib/machines/update';
-
-    const queue = new PQueue({
-        concurrency: 8,
-        intervalCap: 8,
-        interval: 1000,
-    });
-
-    const client = new moodle.Client($session.token);
-
-    let updating: Promise<void> = Promise.resolve();
-
-    async function updateTheWorld() {
-        await update(client, $session.db);
-    }
 
     let editMode = false;
 </script>
-
-{#await updating}
-    <p>Đang update...</p>
-{:then x}
-    <button on:click={() => (updating = updateTheWorld())}>
-        Update the world
-    </button>
-{/await}
 
 {#each $categories as { hidden, coursecategory, name }}
     {#if !hidden || editMode}
