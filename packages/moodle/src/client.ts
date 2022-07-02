@@ -1,4 +1,4 @@
-import { Module, Update, WSFunction } from '.';
+import { Classification, Module, Update, WSFunction } from '.';
 import { GetEnrolledCourses } from './base/get_enrolled_courses';
 import { GetContents } from './base/get_contents';
 import { GetUpdatesSince } from './base/get_updates_since';
@@ -66,6 +66,15 @@ export class Client {
 
     get getEnrolledCourses() {
         return this.call(GetEnrolledCourses);
+    }
+
+    async getCourses() {
+        const coursess = await Promise.all(
+            Object.values(Classification).map(async (classification) => {
+                return await this.getEnrolledCourses(classification);
+            })
+        );
+        return coursess.flat();
     }
 
     get getGroups() {

@@ -57,6 +57,7 @@ export type Section = {
 export type Module = {
     id: number;
     name: string;
+    url: string;
     modname: string;
     modicon: string;
     description: string;
