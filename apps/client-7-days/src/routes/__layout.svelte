@@ -8,7 +8,6 @@
 		if (browser && url.pathname !== '/login' && (await tokenPromise) === null) {
 			return redirect('/login', 302);
 		}
-
 		return {};
 	};
 </script>
@@ -16,11 +15,5 @@
 <script lang="ts">
 	import '../app.css';
 </script>
-
-{#await tokenPromise}
-	Loading
-{:then token}
-	{token}
-{/await}
 
 <slot />

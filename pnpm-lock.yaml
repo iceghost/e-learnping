@@ -13,13 +13,14 @@ importers:
       '@sveltejs/adapter-auto': next
       '@sveltejs/kit': next
       autoprefixer: ^10.4.7
+      date-fns: ^2.28.0
       idb: ^7.0.2
       moodle: workspace:^1.0.0
       p-queue: ^7.2.0
       postcss: ^8.4.14
       postcss-load-config: ^4.0.1
       prettier: ^2.6.2
-      prettier-plugin-svelte: ^2.7.0
+      prettier-plugin-tailwindcss: ^0.1.11
       svelte: ^3.44.0
       svelte-check: ^2.7.1
       svelte-preprocess: ^4.10.7
@@ -30,13 +31,14 @@ importers:
       '@sveltejs/adapter-auto': 1.0.0-next.53
       '@sveltejs/kit': 1.0.0-next.357_svelte@3.48.0
       autoprefixer: 10.4.7_postcss@8.4.14
+      date-fns: 2.28.0
       idb: 7.0.2
       moodle: link:../../packages/moodle
       p-queue: 7.2.0
       postcss: 8.4.14
       postcss-load-config: 4.0.1_postcss@8.4.14
       prettier: 2.7.1
-      prettier-plugin-svelte: 2.7.0_nakrehnrzdf7fdea5k3a4dfy4m
+      prettier-plugin-tailwindcss: 0.1.11_prettier@2.7.1
       svelte: 3.48.0
       svelte-check: 2.7.2_x4nqt44wnukty73um2kz4qdzya
       svelte-preprocess: 4.10.7_3zakmmfkrfgnjsltlgxikg2if4
@@ -2051,14 +2053,13 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /prettier-plugin-svelte/2.7.0_nakrehnrzdf7fdea5k3a4dfy4m:
-    resolution: {integrity: sha512-fQhhZICprZot2IqEyoiUYLTRdumULGRvw0o4dzl5jt0jfzVWdGqeYW27QTWAeXhoupEZJULmNoH3ueJwUWFLIA==}
+  /prettier-plugin-tailwindcss/0.1.11_prettier@2.7.1:
+    resolution: {integrity: sha512-a28+1jvpIZQdZ/W97wOXb6VqI762MKE/TxMMuibMEHhyYsSxQA8Ek30KObd5kJI2HF1ldtSYprFayXJXi3pz8Q==}
+    engines: {node: '>=12.17.0'}
     peerDependencies:
-      prettier: ^1.16.4 || ^2.0.0
-      svelte: ^3.2.0
+      prettier: '>=2.2.0'
     dependencies:
       prettier: 2.7.1
-      svelte: 3.48.0
     dev: true
 
   /prettier/2.7.1:

@@ -4,6 +4,7 @@ import type { Course, Module, Section } from 'moodle';
 
 export type DBCourse = {
 	data: Course;
+	following: boolean;
 };
 
 export type DBContent = {
