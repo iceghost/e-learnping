@@ -1,18 +1,12 @@
 <script context="module" lang="ts">
 	import { browser } from '$app/env';
-	import { token } from '$lib/stores/token';
-	import { get } from 'svelte/store';
+	import { tokenPromise } from '$lib/stores/token';
+	import { redirect } from '$lib/utils';
 
 	export const load: import('./__types/__layout').Load = async ({ url }) => {
 		// check authenticated
-		if (browser && url.pathname !== '/login') {
-			const $token = await get(token).async;
-			if (!$token) {
-				return {
-					status: 302,
-					redirect: '/login'
-				};
-			}
+		if (browser && url.pathname !== '/login' && (await tokenPromise) === null) {
+			return redirect('/login', 302);
 		}
 
 		return {};
@@ -23,7 +17,7 @@
 	import '../app.css';
 </script>
 
-{#await $token.async}
+{#await tokenPromise}
 	Loading
 {:then token}
 	{token}

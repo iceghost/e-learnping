@@ -34,7 +34,7 @@ export interface Schema extends DBSchema {
 	};
 }
 
-export const db = (async () => {
+export const dbPromise = (async () => {
 	await browserPromise;
 	return openDB<Schema>('e-learnping', 1, {
 		upgrade(db, oldVersion) {
