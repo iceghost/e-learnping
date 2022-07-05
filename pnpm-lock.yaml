@@ -48,46 +48,6 @@ importers:
       tslib: 2.4.0
       typescript: 4.7.4
 
-  apps/client-svelte:
-    specifiers:
-      '@sveltejs/adapter-auto': next
-      '@sveltejs/kit': next
-      '@xstate/svelte': ^2.0.0
-      autoprefixer: ^10.4.7
-      date-fns: ^2.28.0
-      idb: ^7.0.2
-      moodle: workspace:^1.0.0
-      p-queue: ^7.2.0
-      postcss: ^8.4.14
-      postcss-load-config: ^4.0.1
-      svelte: ^3.44.0
-      svelte-check: ^2.7.1
-      svelte-preprocess: ^4.10.7
-      tailwindcss: ^3.1.4
-      tslib: ^2.3.1
-      typescript: ^4.7.2
-      vapid-keys: workspace:*
-      xstate: ^4.32.1
-    devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.53
-      '@sveltejs/kit': 1.0.0-next.357_svelte@3.48.0
-      '@xstate/svelte': 2.0.0_d7pokp7cbuf37jpq25f5jmmg3a
-      autoprefixer: 10.4.7_postcss@8.4.14
-      date-fns: 2.28.0
-      idb: 7.0.2
-      moodle: link:../../packages/moodle
-      p-queue: 7.2.0
-      postcss: 8.4.14
-      postcss-load-config: 4.0.1_postcss@8.4.14
-      svelte: 3.48.0
-      svelte-check: 2.7.2_x4nqt44wnukty73um2kz4qdzya
-      svelte-preprocess: 4.10.7_3zakmmfkrfgnjsltlgxikg2if4
-      tailwindcss: 3.1.4
-      tslib: 2.4.0
-      typescript: 4.7.4
-      vapid-keys: link:../../packages/vapid-keys
-      xstate: 4.32.1
-
   apps/worker:
     specifiers:
       '@cloudflare/workers-types': ^3.13.0
@@ -492,22 +452,6 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
-    dev: true
-
-  /@xstate/svelte/2.0.0_d7pokp7cbuf37jpq25f5jmmg3a:
-    resolution: {integrity: sha512-051btq174/fc0lsFUsl5xLbpzEGF4lg6unV1uimjQwKxYTwF2GZXKlcQx2dW7WYpqeH0CWoKvKtb2qIBsnxq5A==}
-    peerDependencies:
-      '@xstate/fsm': ^2.0.0
-      svelte: ^3.24.1
-      xstate: ^4.32.0
-    peerDependenciesMeta:
-      '@xstate/fsm':
-        optional: true
-      xstate:
-        optional: true
-    dependencies:
-      svelte: 3.48.0
-      xstate: 4.32.1
     dev: true
 
   /abbrev/1.1.1:
@@ -2816,10 +2760,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: true
-
-  /xstate/4.32.1:
-    resolution: {integrity: sha512-QYUd+3GkXZ8i6qdixnOn28bL3EvA++LONYL/EMWwKlFSh/hiLndJ8YTnz77FDs+JUXcwU7NZJg7qoezoRHc4GQ==}
     dev: true
 
   /xtend/4.0.2:

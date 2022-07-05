@@ -1,4 +1,6 @@
 <script lang="ts">
+	import PageHeading from '$lib/components/PageHeading.svelte';
+
 	import { setToken, tokenPromise } from '$lib/stores/token';
 
 	let success: boolean | undefined = undefined;
@@ -30,13 +32,8 @@
 	}
 </script>
 
-<div class="mx-auto my-5 w-full max-w-sm">
-	<h1
-		class="text-2xl font-black text-slate-800 underline decoration-sky-300 decoration-4 underline-offset-0"
-		style:text-decoration-skip-ink="none"
-	>
-		Đăng nhập
-	</h1>
+<div class="my-5 mx-auto w-full max-w-sm">
+	<PageHeading>Đăng nhập</PageHeading>
 	<div class="mt-3">
 		{#await tokenPromise then prevToken}
 			{#if prevToken}

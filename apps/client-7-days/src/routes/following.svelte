@@ -1,4 +1,6 @@
 <script lang="ts">
+	import PageHeading from '../lib/components/PageHeading.svelte';
+
 	import { getSemester, parseCategory, parseCourseName } from '$lib/parsers';
 	import { data, state } from '$lib/stores/courses';
 	import { groupBy } from '$lib/utils';
@@ -23,11 +25,7 @@
 </script>
 
 <div class="mx-auto mt-5 w-full max-w-sm px-2">
-	<h1
-		class="text-2xl font-black text-slate-800 underline decoration-sky-300 decoration-4 underline-offset-1"
-	>
-		Danh sách site môn
-	</h1>
+	<PageHeading>Danh sách site môn</PageHeading>
 	<p class="mt-3 text-slate-700">
 		Có thể có nhiều site cho một môn. Các site để nhóm lớp <span
 			class="text-sm tracking-wider text-sky-600">L00</span
