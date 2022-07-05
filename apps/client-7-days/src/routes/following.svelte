@@ -57,5 +57,25 @@
 				</ul>
 			</details>
 		{/each}
+		<p class="mt-10 text-center text-slate-700">
+			Không tìm thấy môn cần tìm? <button
+				class="mt-2 inline-flex items-center space-x-1 rounded-full bg-slate-100 p-2 text-sm font-medium disabled:cursor-wait"
+				on:click={() => state.refresh()}
+				disabled={$state === 'stale'}
+				class:text-slate-600={$state !== 'stale'}
+				class:text-slate-400={$state === 'stale'}
+			>
+				<!-- prettier-ignore -->
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor"
+					class:animate-spin={$state === "stale"}
+				>
+				<path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+				</svg>
+				<span>Tải lại danh sách</span>
+			</button>
+			<span class="mt-2 block text-xs text-slate-400"
+				>(mặc định, mỗi tuần danh sách được tải lại 1 lần)</span
+			>
+		</p>
 	{/if}
 </div>

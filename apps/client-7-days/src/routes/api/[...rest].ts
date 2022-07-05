@@ -5,8 +5,9 @@ export const get: RequestHandler = async ({ params, url }) => {
 	return {
 		status: 200,
 		headers: {
+			...res.headers,
 			'Content-Type': 'application/json'
 		},
-		body: await res.json()
+		body: res.body
 	};
 };

@@ -9,7 +9,10 @@ export type DBCourse = {
 
 export type DBContent = {
 	courseid: Course['id'];
-	sections: (Omit<Section, 'modules'> & { modules: { id: number; name: string }[] })[];
+	expiresAt: Date;
+	sections: (Omit<Section, 'modules'> & {
+		modules: Pick<Module, 'id' | 'name' | 'modname'>[];
+	})[];
 };
 
 export type DBModule = {

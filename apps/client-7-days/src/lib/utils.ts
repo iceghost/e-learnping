@@ -10,10 +10,10 @@ export const redirect = (path: string, status: number) => ({
 	redirect: path
 });
 
-export function addRandom(date: Date | number, duration: Duration) {
-	const newDate = add(date, duration);
-	let seconds = differenceInSeconds(newDate, date);
-	seconds = -Math.log(Math.random()) * seconds;
+export function addRandom(date: Date | number, lower: Duration, upper: Duration) {
+	let lowerSecs = differenceInSeconds(add(date, lower), date);
+	let upperSecs = differenceInSeconds(add(date, upper), date);
+	let seconds = lowerSecs + (upperSecs - lowerSecs) * Math.random();
 	return add(date, { seconds });
 }
 

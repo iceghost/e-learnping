@@ -71,7 +71,7 @@
 	</div>
 	<h2 class="mt-10 text-lg font-bold text-slate-800">Câu hỏi thường gặp</h2>
 	<div
-		class="mt-5 space-y-5 text-justify text-slate-400 [&_mark]:bg-amber-50 [&_mark]:px-1 [&_mark]:text-sm [&_mark]:text-amber-600"
+		class="[&_mark]:bg-amber-50 [&_mark]:px-1 [&_mark]:text-sm [&_mark]:text-amber-600 mt-5 space-y-5 text-justify text-slate-400"
 	>
 		<details open>
 			<summary
