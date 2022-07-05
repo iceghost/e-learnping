@@ -1,8 +1,7 @@
 import { addRandom, type ResourceState } from '$lib/utils';
-import { Client } from 'moodle';
 import { writable, type Readable } from 'svelte/store';
 import { dbPromise, type DBCourse } from './db';
-import { tokenPromise } from './token';
+import { moodleClient, tokenPromise } from './token';
 
 function createCoursesStore(): [Readable<DBCourse[]>, Readable<ResourceState>] {
 	const data = writable<DBCourse[]>([]);
@@ -17,7 +16,7 @@ function createCoursesStore(): [Readable<DBCourse[]>, Readable<ResourceState>] {
 
 		if (new Date() > nextCoursesRefresh) {
 			state.set('stale');
-			const moodle = new Client(token);
+			const moodle = moodleClient(token);
 			const courses = await moodle.getCourses();
 			await Promise.all(
 				courses.map(async (course) => {

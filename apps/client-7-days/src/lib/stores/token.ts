@@ -7,8 +7,11 @@ export const tokenPromise = new Promise<string | null>(async (resolve) => {
 	resolve(token ?? null);
 });
 
+export const moodleClient = (token: string) =>
+	new Client(token, new URL('/api', window.location.origin).toString());
+
 export async function setToken(newToken: string) {
-	const moodle = new Client(newToken);
+	const moodle = moodleClient(newToken);
 	try {
 		await moodle.getSiteInfo();
 	} catch {

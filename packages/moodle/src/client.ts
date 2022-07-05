@@ -16,7 +16,7 @@ export class Client {
         token: string,
         baseUrl: string = 'http://e-learning.hcmut.edu.vn'
     ) {
-        this.baseUrl = new URL('/webservice/rest/server.php', baseUrl);
+        this.baseUrl = new URL(baseUrl + '/webservice/rest/server.php');
         this.defaultParams = {
             moodlewsrestformat: 'json',
             wstoken: token,
