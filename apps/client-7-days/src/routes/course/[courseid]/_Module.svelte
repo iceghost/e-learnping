@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { dbPromise } from '$lib/stores/db';
+	import { page } from '$app/stores';
 
 	export let id: number;
 </script>
@@ -10,7 +11,7 @@
 			<img src={module.data.modicon} alt="{module.data.modname} icon" class="w-5 h-5" />
 			<span>
 				<a
-					href="/module/{module.data.id}"
+					href="/course/{$page.params.courseid}/module/{module.data.id}"
 					class="underline decoration-1 decoration-sky-300 hover:bg-sky-50"
 				>
 					{module.data.name}
