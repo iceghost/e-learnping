@@ -31,6 +31,10 @@
 			class="text-sm tracking-wider text-sky-600">L00</span
 		> là site lớp nhỏ, những site để tên giảng viên là site lớp lớn.
 	</p>
+	<p class="mt-2 text-slate-700">
+		Lần đầu, bạn phải chọn theo dõi các site cần quan tâm. Đến kỳ mới, khi các site mới được thêm
+		vào, web sẽ tự bấm theo dõi cho bạn.
+	</p>
 	<div class="sticky top-0 bg-white/80 py-2">
 		<input
 			type="text"

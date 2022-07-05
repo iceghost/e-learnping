@@ -29,11 +29,16 @@ function createCoursesStore(): [
 		if (token && $state === 'stale') {
 			const moodle = moodleClient(token);
 			const db = await dbPromise;
+
+			// if first time, unfollow all
+			// on subsequent times, auto follow
+			const count = await db.count('courses');
+
 			const courses = await moodle.getCourses();
 			await Promise.all(
 				courses.map(async (course) => {
 					const oldCourse = await db.get('courses', course.id);
-					await db.put('courses', { data: course, following: oldCourse?.following ?? true });
+					await db.put('courses', { data: course, following: oldCourse?.following ?? count != 0 });
 				})
 			);
 			data.set(await db.getAll('courses'));
