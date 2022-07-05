@@ -29,7 +29,7 @@
 	<p class="mt-3 text-slate-700">
 		Có thể có nhiều site cho một môn. Các site để nhóm lớp <span
 			class="text-sm tracking-wider text-sky-600">L00</span
-		> là site lớp nhỏ, những môn để tên giảng viên là site lớp lớn.
+		> là site lớp nhỏ, những site để tên giảng viên là site lớp lớn.
 	</p>
 	<div class="sticky top-0 bg-white/80 py-2">
 		<input
@@ -47,7 +47,9 @@
 	{#if $state !== 'initial'}
 		{#each processed as [category, courses]}
 			<details open>
-				<summary class="mt-8 mb-5 border-b-2 border-slate-100 pb-1 font-semibold text-sky-700">
+				<summary
+					class="mt-8 mb-5 border-b-2 border-slate-200 bg-slate-50 px-2 py-1 font-semibold text-sky-700"
+				>
 					{category.name}
 				</summary>
 				<ul class="space-y-3">
@@ -74,7 +76,7 @@
 				<span>Tải lại danh sách</span>
 			</button>
 			<span class="mt-2 block text-xs text-slate-400"
-				>(mặc định, mỗi tuần danh sách được tải lại 1 lần)</span
+				>(mặc định mỗi tuần, danh sách được tải lại 1 lần)</span
 			>
 		</p>
 	{/if}

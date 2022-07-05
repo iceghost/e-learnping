@@ -11,7 +11,7 @@
 	<p class="flex-grow">
 		<a
 			href="/course/{course.data.id}"
-			class="underline decoration-sky-300 decoration-2 underline-offset-1"
+			class="underline decoration-sky-300 decoration-2 underline-offset-1 hover:bg-sky-50"
 		>
 			{@html parts.name}
 		</a>
