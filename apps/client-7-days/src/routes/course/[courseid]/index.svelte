@@ -21,7 +21,7 @@
 	export let content: Promise<DBContent> = Promise.race([]);
 </script>
 
-<div class="mx-auto w-full max-w-sm">
+<div class="mx-auto mt-3 w-full max-w-sm">
 	{#await Promise.all([course, content]) then [course, content]}
 		{@const parts = parseCourseName(course.data.fullname)}
 		<PageHeading>{parts.name}</PageHeading>
@@ -29,11 +29,11 @@
 		{#each content.data as section}
 			<details open>
 				<summary
-					class="mt-6 mb-3 border-b-2 border-slate-300 bg-slate-100 px-2 py-1 font-bold text-sky-800"
+					class="font-display border-b-2 border-slate-300 bg-slate-100 px-2 py-1 font-bold text-slate-700"
 				>
 					{@html section.name}
 				</summary>
-				<div class="space-y-4">
+				<div class="space-y-4 mx-2 py-5">
 					{#each section.modules as module}
 						<Module id={module.id} />
 					{/each}

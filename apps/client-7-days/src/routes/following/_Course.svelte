@@ -8,7 +8,7 @@
 	$: parts = parseCourseName(course.data.fullname);
 </script>
 
-<li class="flex items-center justify-between">
+<li class="flex items-center justify-between font-medium">
 	<p class="flex-grow">
 		<a
 			href="/course/{course.data.id}"
@@ -18,13 +18,14 @@
 		</a>
 		{#if parts.code}
 			<br />
-			<span class="text-xs uppercase tracking-wider text-sky-600">{parts.code} · {parts.class}</span
-			>
+			<span class="font-functional text-xs uppercase tracking-wider text-sky-700">
+				{parts.code} · {parts.class}
+			</span>
 		{/if}
 	</p>
 	<div class="flex w-32 flex-none justify-end">
 		<button
-			class="rounded-full border-2 px-2 py-2 text-sm font-medium
+			class="rounded-full border-2 px-2 py-2 font-functional text-sm font-semibold
 			{course.following
 				? 'border-sky-600 bg-sky-600 text-sky-50 shadow shadow-sky-700/30'
 				: 'border-slate-100 text-slate-400 hover:border-sky-200 hover:text-sky-700'}

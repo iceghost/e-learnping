@@ -4,7 +4,9 @@ const config = {
 	theme: {
 		extend: {
 			fontFamily: {
-				sans: ['Be Vietnam Pro', 'sans-serif']
+				display: ['MuseoModerno', 'sans-serif'],
+				functional: ['Quicksand', 'sans-serif'],
+				body: ['Maitree', 'sans-serif']
 			}
 		}
 	},

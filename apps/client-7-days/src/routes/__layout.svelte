@@ -16,7 +16,7 @@
 		}
 
 		// if url is /login
-		if (!token) return {};
+		if (!token) return { stuff: { db } };
 
 		// authenticated
 		return { stuff: { token, db } };
@@ -28,3 +28,9 @@
 </script>
 
 <slot />
+
+<style global lang="postcss">
+	:root {
+		@apply font-body;
+	}
+</style>
