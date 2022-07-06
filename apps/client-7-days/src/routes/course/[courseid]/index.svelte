@@ -21,11 +21,12 @@
 	export let content: Promise<DBContent> = Promise.race([]);
 </script>
 
-<div class="mx-auto mt-3 w-full max-w-sm">
+<div class="mx-auto w-full max-w-sm">
 	{#await Promise.all([course, content]) then [course, content]}
 		{@const parts = parseCourseName(course.data.fullname)}
-		<PageHeading>{parts.name}</PageHeading>
-		<p>{parts.class}</p>
+		<PageHeading title={parts.name}>
+			<p class="text-sky-50 font-medium text-sm mt-1">{parts.code} — {parts.class}</p>
+		</PageHeading>
 		{#each content.data as section}
 			<details open>
 				<summary

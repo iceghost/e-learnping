@@ -4,8 +4,8 @@ const config = {
 	theme: {
 		extend: {
 			fontFamily: {
-				display: ['MuseoModerno', 'sans-serif'],
-				functional: ['Quicksand', 'sans-serif'],
+				display: ['Manrope', 'sans-serif'],
+				functional: ['Manrope', 'sans-serif'],
 				body: ['Maitree', 'sans-serif']
 			}
 		}

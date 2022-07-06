@@ -36,7 +36,12 @@
 </script>
 
 <div class="my-5 mx-auto w-full max-w-sm pl-2 pr-3">
-	<PageHeading>Đăng nhập</PageHeading>
+	<h1
+		class="text-2xl font-black text-slate-800 underline decoration-sky-300 decoration-4 underline-offset-0"
+		style:text-decoration-skip-ink="none"
+	>
+		Đăng nhập
+	</h1>
 	<div class="mt-3">
 		{#if $page.stuff.token}
 			<p class="text-lg text-slate-700">Đã đăng nhập.</p>
@@ -73,7 +78,7 @@
 	<h2 class="mt-10 font-display text-lg font-bold text-slate-800">Câu hỏi thường gặp</h2>
 	<div class="mt-5 space-y-8 text-justify text-slate-500">
 		<QnA title="Token lấy từ đâu?">
-			<ol class="ml-5 list-decimal accent-slate-200">
+			<ol class="ml-1 list-decimal accent-slate-200">
 				<li>Vào BKeL, click vào <mark>avatar</mark> ở góc phải trên.</li>
 				<li>Click <mark>Tùy chọn</mark> từ menu hiện ra.</li>
 				<li>Tìm tùy chọn có tên là <mark>Security keys</mark></li>
