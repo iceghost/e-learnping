@@ -1,5 +1,6 @@
 /// <reference types="@sveltejs/kit" />
-import { DBCourse, type DBContent, type DBModule } from '$lib/stores/db';
+import { DBInstance, DBCourse, type DBContent, type DBModule } from '$lib/stores/db';
+import { createCoursesStore } from '$lib/stores/courses';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -10,9 +11,12 @@ declare global {
 		// interface Platform {}
 		// interface Session {}
 		interface Stuff {
-			course?: DBCourse;
-			content?: DBContent;
-			module?: DBModule;
+			token: string;
+			db: DBInstance;
+			courses: DBCourse[];
+			course: DBCourse;
+			content: DBContent;
+			module: DBModule;
 		}
 	}
 }

@@ -1,5 +1,7 @@
 <script context="module" lang="ts">
-	export const load: import('./__types/index').Load = async ({ params, stuff }) => {
+	export const load: import('./__types/index').Load = async ({ stuff }) => {
+		if (!stuff.token) return {};
+
 		return {
 			props: {
 				course: stuff.course,

@@ -1,5 +1,4 @@
-import { browserPromise } from '$lib/utils';
-import { openDB, type DBSchema } from 'idb';
+import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
 import type { Course, Module, Section } from 'moodle';
 
 export type DBCourse = {
@@ -38,9 +37,10 @@ export interface Schema extends DBSchema {
 	};
 }
 
-export const dbPromise = (async () => {
-	await browserPromise;
-	return openDB<Schema>('e-learnping', 1, {
+export type DBInstance = IDBPDatabase<Schema>;
+
+export const getDBInstance = () =>
+	openDB<Schema>('e-learnping', 1, {
 		upgrade(db, oldVersion) {
 			switch (oldVersion) {
 				// When the database is newly created, oldVersion is 0.
@@ -62,4 +62,3 @@ export const dbPromise = (async () => {
 			}
 		}
 	});
-})();

@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { dbPromise } from '$lib/stores/db';
 	import { page } from '$app/stores';
 
 	export let id: number;
 </script>
 
-{#await dbPromise.then((db) => db.get('modules', id)) then module}
+{#await $page.stuff.db.get('modules', id) then module}
 	{#if module}
 		<div class="flex items-center space-x-2">
 			<img src={module.data.modicon} alt="{module.data.modname} icon" class="w-5 h-5" />

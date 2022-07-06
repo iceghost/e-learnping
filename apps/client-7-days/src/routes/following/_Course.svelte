@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { parseCourseName } from '$lib/parsers';
-	import { dbPromise, type DBCourse } from '$lib/stores/db';
+	import type { DBCourse } from '$lib/stores/db';
+	import { page } from '$app/stores';
 
 	export let course: DBCourse;
 
@@ -30,8 +31,7 @@
 			"
 			on:click={async () => {
 				course.following = !course.following;
-				const db = await dbPromise;
-				await db.put('courses', course);
+				await $page.stuff.db.put('courses', course);
 			}}
 		>
 			{course.following ? 'Bỏ theo dõi' : 'Theo dõi'}

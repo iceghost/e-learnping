@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	import PageHeading from '$lib/components/PageHeading.svelte';
 
-	import { setToken, tokenPromise } from '$lib/stores/token';
+	import { setToken, getToken } from '$lib/stores/token';
 
 	let success: boolean | undefined = undefined;
 
@@ -17,7 +19,7 @@
 			const data = new FormData(node);
 			const newToken = data.get('token')?.toString() || '';
 			try {
-				await setToken(newToken);
+				await setToken($page.stuff.db, newToken);
 				success = true;
 			} catch (e) {
 				window.alert(e);
@@ -35,7 +37,7 @@
 <div class="my-5 mx-auto w-full max-w-sm">
 	<PageHeading>Đăng nhập</PageHeading>
 	<div class="mt-3">
-		{#await tokenPromise then prevToken}
+		{#await getToken then prevToken}
 			{#if prevToken}
 				<p class="text-slate-700">Đã đăng nhập.</p>
 			{:else if success === true}

@@ -1,6 +1,6 @@
 import { addRandom } from '$lib/utils';
-import { dbPromise, type DBContent } from './db';
-import { moodleClient, tokenPromise } from './token';
+import type { DBContent, DBInstance } from './db';
+import { moodleClient } from './token';
 
 /**
  * Refresh stale contents or on demand
@@ -8,9 +8,12 @@ import { moodleClient, tokenPromise } from './token';
  * @param forced used in case of a new update
  * @returns
  */
-export async function refreshContent(courseid: number, forced = false): Promise<DBContent> {
-	const [db, token] = await Promise.all([dbPromise, tokenPromise]);
-
+export async function refreshContent(
+	db: DBInstance,
+	token: string,
+	courseid: number,
+	forced = false
+): Promise<DBContent> {
 	let content = await db.get('contents', courseid);
 	if (forced || !content || new Date() > content.expiresAt) {
 		// fetch fresh content

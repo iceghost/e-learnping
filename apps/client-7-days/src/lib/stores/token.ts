@@ -1,22 +1,20 @@
 import { Client } from 'moodle';
-import { dbPromise } from './db';
-
-export const tokenPromise = new Promise<string | null>(async (resolve) => {
-	const db = await dbPromise;
-	const token: string | undefined = await db.get('kv', 'token');
-	resolve(token ?? null);
-});
+import type { DBInstance } from './db';
 
 export const moodleClient = (token: string) =>
 	new Client(token, new URL('/api', window.location.origin).toString());
 
-export async function setToken(newToken: string) {
+export async function getToken(db: DBInstance) {
+	const token: string | undefined = await db.get('kv', 'token');
+	return token ?? null;
+}
+
+export async function setToken(db: DBInstance, newToken: string) {
 	const moodle = moodleClient(newToken);
 	try {
 		await moodle.getSiteInfo();
 	} catch {
 		throw new Error('Set token không thành công. Kiểm tra lại token nhen');
 	}
-	const db = await dbPromise;
-	db.put('kv', newToken, 'token');
+	await db.put('kv', newToken, 'token');
 }
