@@ -14,7 +14,13 @@ export async function updateCourse(db: DBInstance, token: string, courseid: numb
 		const updates = await moodle.getUpdatesSince(courseid, course.nextUpdateAt);
 		const dbUpdates: DBUpdate[] = [];
 		const promises = updates.map(async (update) => {
-			const dbUpdate = { data: update, courseid, since: course.nextUpdateAt, until: now };
+			const dbUpdate = {
+				data: update,
+				courseid,
+				since: course.nextUpdateAt,
+				until: now,
+				read: false
+			};
 			dbUpdates.push(dbUpdate);
 			await db.put('updates', dbUpdate);
 		});

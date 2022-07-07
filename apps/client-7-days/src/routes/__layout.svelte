@@ -31,6 +31,6 @@
 
 <style global lang="postcss">
 	:root {
-		@apply font-body;
+		@apply font-body bg-slate-100;
 	}
 </style>

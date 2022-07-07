@@ -14,11 +14,13 @@
 		if (!course) return { status: 404 };
 
 		const content = await refreshContent(db, token, courseid);
+		const updates = await db.getAllFromIndex('updates', 'by-courseid', courseid);
 
 		return {
 			stuff: {
 				course,
-				content
+				content,
+				updates
 			}
 		};
 	};

@@ -24,6 +24,7 @@ export type DBUpdate = {
 	courseid: Course['id'];
 	since: Date;
 	until: Date;
+	read: boolean;
 };
 
 export interface Schema extends DBSchema {
@@ -46,13 +47,16 @@ export interface Schema extends DBSchema {
 	updates: {
 		value: DBUpdate;
 		key: [DBUpdate['since'], DBUpdate['data']['id']];
+		indexes: {
+			'by-courseid': DBUpdate['courseid'];
+		};
 	};
 }
 
 export type DBInstance = IDBPDatabase<Schema>;
 
 export const getDBInstance = () =>
-	openDB<Schema>('e-learnping', 2, {
+	openDB<Schema>('e-learnping', 4, {
 		async upgrade(db, oldVersion, _, tx) {
 			switch (oldVersion) {
 				// When the database is newly created, oldVersion is 0.
@@ -76,13 +80,16 @@ export const getDBInstance = () =>
 					db.createObjectStore('updates', {
 						keyPath: ['since', 'data.id']
 					});
-					if (oldVersion === 1) {
+					if (oldVersion == 1) {
 						tx.done.then(async () => {
 							for await (const cursor of await db.transaction('courses', 'readwrite').store) {
 								await cursor.update({ ...cursor.value, nextUpdateAt: new Date(0) });
 							}
 						});
 					}
+
+				case 2:
+					tx.objectStore('updates').createIndex('by-courseid', 'courseid');
 			}
 		}
 	});

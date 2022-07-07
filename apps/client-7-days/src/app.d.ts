@@ -1,5 +1,5 @@
 /// <reference types="@sveltejs/kit" />
-import { DBInstance, DBCourse, type DBContent, type DBModule } from '$lib/stores/db';
+import { DBInstance, DBCourse, type DBContent, type DBModule, type DBUpdate } from '$lib/stores/db';
 import { createCoursesStore } from '$lib/stores/courses';
 
 // See https://kit.svelte.dev/docs/types#app
@@ -17,6 +17,7 @@ declare global {
 			course: DBCourse;
 			content: DBContent;
 			module: DBModule;
+			updates: DBUpdate[];
 		}
 	}
 }
