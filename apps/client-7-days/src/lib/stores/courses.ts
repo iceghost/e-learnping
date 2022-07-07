@@ -19,7 +19,11 @@ export async function refreshCourses(
 		const courses = await moodle.getCourses();
 		const promises = courses.map(async (course) => {
 			const oldCourse = await db.get('courses', course.id);
-			await db.put('courses', { data: course, following: oldCourse?.following ?? count != 0 });
+			await db.put('courses', {
+				data: course,
+				following: oldCourse?.following ?? count != 0,
+				nextUpdateAt: new Date(0)
+			});
 		});
 
 		await Promise.all(promises);
