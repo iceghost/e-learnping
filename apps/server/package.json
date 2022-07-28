@@ -5,13 +5,19 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^4.2.1"
+    "@prisma/client": "^4.1.0",
+    "@trpc/server": "^9.26.2",
+    "dotenv": "^16.0.1",
+    "fastify": "^4.2.1",
+    "prisma": "^4.1.0",
+    "web-push": "^3.5.0",
+    "zod": "^3.17.10"
   },
   "devDependencies": {
     "nodemon": "^2.0.19",
